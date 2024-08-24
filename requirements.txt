@@ -1,0 +1,9 @@
+h5py
+numpy
+scipy
+torch
+torchvision
+tqdm
+opencv-python
+matplotlib
+ipykernel
