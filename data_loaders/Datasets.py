@@ -14,6 +14,8 @@ from typing import Tuple
 import os
 import torch
 from tqdm import tqdm
+import numpy as np
+from config import CONFIG
 from torch.utils.data import Dataset
 import logging
 from helper_methods.video_io import get_frames_and_gt_from_video
@@ -21,7 +23,7 @@ from helper_methods.video_io import get_frames_and_gt_from_video
 logger = logging.getLogger(__name__)
 logging.basicConfig(filename='tmp/run.log', encoding='utf-8', level=logging.INFO)
 
-class Video:
+class Video:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
     """
         Description
         -----------
@@ -76,10 +78,13 @@ class VideoDataSet(Dataset):
         features = video.features
         gtscores = video.gtscores
 
-        return torch.from_numpy(features), torch.from_numpy(gtscores)
+        # Reshape to Make X as (T,3,H,W)
+        features = np.moveaxis(features, -1,1)
+
+        return torch.from_numpy(features).float().to(CONFIG.DEVICE), torch.from_numpy(gtscores).to(CONFIG.DEVICE)
 
 if __name__ == '__main__':
     video_path = "/home/paperspace/src/video_summarizer/data/datasets/SumMe/videos"
     vd = VideoDataSet(video_path)
-    feature, gtscore  = vd[2]
+    feature, gtscore  = vd[0]
     logger.info(feature.shape)
